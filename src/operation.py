@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-
 from src.amount import Amount
 
 
