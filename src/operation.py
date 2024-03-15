@@ -22,6 +22,11 @@ class Operation:
         self.to = self.__get_to_or_from(to)
         self.from_ = self.__get_to_or_from(from_account)
 
+    def __repr__(self) -> str:
+        return (f"{self.date.strftime("%d.%m.%Y")} {self.description}\n"
+                f"{self.from_} -> {self.to}\n"
+                f"{self.operation_amount.amount} {self.operation_amount.currency.name}\n")
+
     @staticmethod
     def __get_to_or_from(item: str | None) -> str | None:
         if item is None:
