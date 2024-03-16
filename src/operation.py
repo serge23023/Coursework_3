@@ -1,6 +1,6 @@
 # Импорт модулей re, datetime и Amount из src.amount
-import re
 from datetime import datetime
+
 from src.amount import Amount
 
 
@@ -8,6 +8,7 @@ class Operation:
     """
     Класс Operation представляет операцию.
     """
+
     def __init__(self,
                  operation_id: int,
                  state: str,
@@ -32,9 +33,14 @@ class Operation:
         """
         Представление объекта в виде строки
         """
-        return (f"{self.date.strftime("%d.%m.%Y")} {self.description}\n"
-                f"{self.from_} -> {self.to}\n"
-                f"{self.operation_amount.amount} {self.operation_amount.currency.name}\n")
+        if self.from_ is None:
+            return (f"{self.date.strftime("%d.%m.%Y")} {self.description}\n"
+                    f"{self.to}\n"
+                    f"{self.operation_amount.amount} {self.operation_amount.currency.name}\n")
+        else:
+            return (f"{self.date.strftime("%d.%m.%Y")} {self.description}\n"
+                    f"{self.from_} -> {self.to}\n"
+                    f"{self.operation_amount.amount} {self.operation_amount.currency.name}\n")
 
     # Статический метод для обработки атрибутов to и from_
     @staticmethod
@@ -44,10 +50,10 @@ class Operation:
         """
         if item is None:
             return None
-        index = re.search(r"\d", item).start()
-        match len(item[index:]):
+        split_ = item.split()
+        match len(split_[-1:][0]):
             case 16:
-                return (item[:index] + item[index:index + 4] + ' ' + item[index + 4:index + 6]
-                        + '** **** ' + item[index + 12:])
+                return (' '.join(split_[:-1]) + ' ' + split_[-1:][0][:4] + ' ' + split_[-1:][0][4:6]
+                        + '** **** ' + item[-4:])
             case _:
-                return item[:index] + '**' + item[-4:]
+                return ' '.join(split_[:-1]) + ' **' + item[-4:]
